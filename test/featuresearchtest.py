@@ -1,7 +1,7 @@
 import unittest
 
 from src.datareader import read_data
-from src.featuresearch import feature_search_demo
+from src.featuresearch import forward_feature_search
 
 class FeatureSearchTest(unittest.TestCase):
     @classmethod
@@ -10,7 +10,7 @@ class FeatureSearchTest(unittest.TestCase):
 
     def test_demo_output(self):
         data = read_data(self.data_path)
-        feature_search_demo(data)
+        forward_feature_search(data)
 
 
 if __name__ == '__main__':
