@@ -1,3 +1,4 @@
+import numpy as np
 
 from src.cross_validation import leave_one_out_cross_validation
 
@@ -14,8 +15,8 @@ def feature_search_demo(data):
             str(i),
             'th level of the search three'
             )
-        feature_to_add_at_this_level = 0
-        best_so_far_accuracy = 0
+        feature_to_add_at_this_level = np.nan
+        best_so_far_accuracy = -np.inf
 
         for k in range(1,m):
             # only consider adding this feature if it was not already added
@@ -25,11 +26,11 @@ def feature_search_demo(data):
                     str(k),
                     ' feature'
                 )
-            accuracy = leave_one_out_cross_validation(data, current_set_of_features, k)
+                accuracy = leave_one_out_cross_validation(data, current_set_of_features, k)
 
-            if accuracy > best_so_far_accuracy:
-                best_so_far_accuracy = accuracy
-                feature_to_add_at_this_level = k
+                if accuracy > best_so_far_accuracy:
+                    best_so_far_accuracy = accuracy
+                    feature_to_add_at_this_level = k
             
         current_set_of_features.add(feature_to_add_at_this_level)
         print(
