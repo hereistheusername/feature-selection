@@ -105,16 +105,23 @@ def backward_feature_search(data):
     (n,m) = data.shape
 
     current_set_of_features = set([n for n in range(1, m)])
+    best_features = set()
+    last_accuracy = -np.inf
+    best_accuracy = -np.inf
 
     for i in range(1,m):
         feature_to_eliminate_at_this_level = np.nan
         best_so_far_accuracy = -np.inf
-        last_accuracy = -np.inf
-
+        # when there is only 1 feature left in current_set_of_features, we can skip this loop
+        # because that's meaningless
+        if len(current_set_of_features) == 1:
+            break
         for k in range(1,m):
-            # only consider adding this feature if it was not already added
+            # only consider eliminating this feature if it was already added
+            # when there is only 1 feature left in current_set_of_features, we can skip this loop
+            # because that's meaningless
             if k in current_set_of_features:
-                accuracy = leave_one_out_cross_validation(data, current_set_of_features, k)
+                accuracy = leave_one_out_cross_validation(data, current_set_of_features, k, add_or_delete=0)
 
                 print(
                     '--Considering eliminating the ',
@@ -127,7 +134,6 @@ def backward_feature_search(data):
                 if accuracy > best_so_far_accuracy:
                     best_so_far_accuracy = accuracy
                     feature_to_eliminate_at_this_level = k
-                    
             
         if best_so_far_accuracy < last_accuracy:
             print(
@@ -135,6 +141,10 @@ def backward_feature_search(data):
             )
         last_accuracy = best_so_far_accuracy
         current_set_of_features.remove(feature_to_eliminate_at_this_level)
+        # the larger iterations are, the smaller the current_set_of_features are
+        if best_accuracy <= best_so_far_accuracy:
+            best_accuracy = last_accuracy
+            best_features = current_set_of_features.copy()
         print(
             'Feature set ',
             str(current_set_of_features),
@@ -143,3 +153,11 @@ def backward_feature_search(data):
             '%\n'
         )
         
+    print(
+        'Finished search!! The best feauture subset is ',
+        str(best_features),
+        ', which has an accuracy of ',
+        str(best_accuracy*100),
+        '%'
+    )
+    
