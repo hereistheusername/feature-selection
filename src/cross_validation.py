@@ -5,12 +5,19 @@ import numpy as np
 # def leave_one_out_cross_validation(data, current_set, feature_to_add):
 #     return random.random()
 
-def leave_one_out_cross_validation(data, current_set, feature_to_add):
+def leave_one_out_cross_validation(data, current_set, feature_to_add, add_or_delete=1):
 
     # copy data and set irrelevant features as 0s
     __data = data.copy()
-    __data[:,feature_to_add] = 0
-    for feature in current_set:
+
+    # add_or_delete equals 1 means current_set adds the feature_to_add, otherwise the set delete it
+    __set = current_set.copy()
+    if add_or_delete:
+        __set.add(feature_to_add)
+    else:
+        __set.remove(feature_to_add)
+
+    for feature in __set:
         __data[:, feature] = 0
 
     number_correctly_classified = 0
