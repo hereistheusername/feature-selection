@@ -4,6 +4,7 @@ import numpy as np
 
 from src.datareader import read_data
 from src.featuresearch import forward_feature_search, backward_feature_search
+from src.datanormalize import normalize
 
 # custom = 1; default = 0
 def is_custom_or_defualt_data(answers):
@@ -65,4 +66,16 @@ if __name__ == '__main__':
         feature_search = backward_feature_search
 
     data = read_data(path)
+    (n, m) = data.shape
+    print(
+        '\nThis dataset has ',
+        str(m-1),
+        ' features',
+        '(not including the class attribute), with ',
+        str(n),
+        ' instances\n',
+        '\nPlease wait while I normalize the data...'
+    )
+    data = normalize(data)
+    print('Done!\n')
     feature_search(data)
