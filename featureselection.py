@@ -2,9 +2,15 @@ from pprint import pprint
 from PyInquirer import prompt, Separator
 import numpy as np
 
+import os
+
 from src.datareader import read_data
 from src.featuresearch import forward_feature_search, backward_feature_search
 from src.datanormalize import normalize
+
+data_path = 'data'
+datasets = [dataset for dataset in os.listdir(data_path) if os.path.splitext(dataset)[1] == '.txt']
+datasets.sort()
 
 # custom = 1; default = 0
 def is_custom_or_defualt_data(answers):
@@ -34,10 +40,7 @@ questions = [
         'type': 'list',
         'name': 'chosenData',
         'message': 'choose data',
-        'choices': [
-            'data/CS170_SMALLtestdata__15.txt',
-            'data/CS170_largetestdata__55.txt'
-        ],
+        'choices': datasets,
         'when': lambda ans: not is_custom_or_defualt_data(ans)
     },
     {
@@ -58,7 +61,7 @@ if __name__ == '__main__':
     if is_custom_or_defualt_data(answers):
         path = answers['customDataPath']
     else:
-        path = answers['chosenData']
+        path = os.path.join(data_path, answers['chosenData'])
 
     if is_forward_or_backward(answers):
         feature_search = forward_feature_search
@@ -73,9 +76,7 @@ if __name__ == '__main__':
         ' features',
         '(not including the class attribute), with ',
         str(n),
-        ' instances\n',
-        '\nPlease wait while I normalize the data...'
+        ' instances\n'
     )
-    data = normalize(data)
-    print('Done!\n')
+
     feature_search(data)
