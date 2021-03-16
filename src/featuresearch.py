@@ -58,7 +58,7 @@ def forward_feature_search(data):
         'Set ',
         str(current_set_of_features),
         ' has accuracy ',
-        str(round(acc, 2)),
+        str(round(acc*100, 2)),
         '%\n'
     )
 
@@ -126,7 +126,7 @@ def backward_feature_search(data):
         'Set ',
         str(current_set_of_features),
         ' has accuracy ',
-        str(round(acc, 2)),
+        str(round(acc*100, 2)),
         '%\n'
     )
     for i in range(1,m):
