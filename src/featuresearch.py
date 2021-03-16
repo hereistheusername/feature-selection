@@ -51,6 +51,17 @@ def forward_feature_search(data):
     (n,m) = data.shape
     last_accuracy = -np.inf
     best_accuracy = -np.inf
+
+    # report the accuracy of the empty set {} 
+    acc = leave_one_out_cross_validation(data, current_set_of_features, 0)
+    print(
+        'Set ',
+        str(current_set_of_features),
+        ' has accuracy ',
+        str(round(acc, 2)),
+        '%\n'
+    )
+
     for i in range(1,m):
         feature_to_add_at_this_level = np.nan
         best_so_far_accuracy = -np.inf
@@ -64,7 +75,7 @@ def forward_feature_search(data):
                     '--Considering adding the ',
                     str(k),
                     ' feature, and accuracy is ',
-                    str(accuracy*100),
+                    str(round(accuracy*100, 2)),
                     '%'
                 )
 
@@ -85,7 +96,7 @@ def forward_feature_search(data):
             'Feature set ',
             str(current_set_of_features),
             ' was best, accuracy is ',
-            str(best_so_far_accuracy*100),
+            str(round(best_so_far_accuracy*100,2)),
             '%\n'
         )
         
@@ -93,7 +104,7 @@ def forward_feature_search(data):
         'Finished search!! The best feauture subset is ',
         str(best_features),
         ', which has an accuracy of ',
-        str(best_accuracy*100),
+        str(round(best_accuracy*100, 2)),
         '%'
     )
 
@@ -109,13 +120,21 @@ def backward_feature_search(data):
     last_accuracy = -np.inf
     best_accuracy = -np.inf
 
+    # report the accuracy of the set with all features
+    acc = leave_one_out_cross_validation(data, current_set_of_features, 0)
+    print(
+        'Set ',
+        str(current_set_of_features),
+        ' has accuracy ',
+        str(round(acc, 2)),
+        '%\n'
+    )
     for i in range(1,m):
         feature_to_eliminate_at_this_level = np.nan
         best_so_far_accuracy = -np.inf
         # when there is only 1 feature left in current_set_of_features, we can skip this loop
         # because that's meaningless
-        if len(current_set_of_features) == 1:
-            break
+        
         for k in range(1,m):
             # only consider eliminating this feature if it was already added
             # when there is only 1 feature left in current_set_of_features, we can skip this loop
@@ -127,7 +146,7 @@ def backward_feature_search(data):
                     '--Considering eliminating the ',
                     str(k),
                     ' feature, and accuracy is ',
-                    str(accuracy*100),
+                    str(round(accuracy*100, 2)),
                     '%'
                 )
 
@@ -149,7 +168,7 @@ def backward_feature_search(data):
             'Feature set ',
             str(current_set_of_features),
             ' was best, accuracy is ',
-            str(best_so_far_accuracy*100),
+            str(round(best_so_far_accuracy*100, 2)),
             '%\n'
         )
         
@@ -157,7 +176,7 @@ def backward_feature_search(data):
         'Finished search!! The best feauture subset is ',
         str(best_features),
         ', which has an accuracy of ',
-        str(best_accuracy*100),
+        str(round(best_accuracy*100, 2)),
         '%'
     )
     
