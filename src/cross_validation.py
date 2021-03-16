@@ -31,13 +31,18 @@ def leave_one_out_cross_validation(data, current_set, feature_to_add, add_or_del
         object_to_classity = __data[i, 1:]
         label_object_to_classify = __data[i, 0]
 
+        leave_one_out_data = np.delete(__data, i, axis=0)
+
         nearest_neighbor_distance = np.inf
         nearest_neighbor_location = np.inf
         nearest_neighbor_label = np.nan
 
-        distances = np.sqrt(np.sum((object_to_classity[np.newaxis,:] - __data[:,1:])**2, axis=1))
-        min_distance = np.where(np.min(distances[distances>0]) == distances)
+        distances = np.sqrt(np.sum((object_to_classity[np.newaxis,:] - leave_one_out_data[:,1:])**2, axis=1))
+        min_distance = np.where(np.min(distances) == distances)
         min_distance_label = min_distance[0][0]
+        # indeces changed because one row was deleted
+        if i <= min_distance_label:
+            min_distance_label+=1
 
         if label_object_to_classify == __data[min_distance_label,0]:
             number_correctly_classified += 1
